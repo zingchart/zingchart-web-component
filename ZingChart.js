@@ -155,24 +155,39 @@ class ZingChart extends HTMLElement {
   }
 
   parseChildren() {
-    return parse.call(this, this.children);
+    // return parse.call(this, this.children);
+    return parse(this.children, this.chartData);
 
-    function parse(children) {
+    function parse(children, chartData) {
       Array.from(children).forEach((element) => {
-        console.log(element);
         const path = element.tagName.toLowerCase().replace('zc-', '').split('-');
-        console.log(path);
   
         /* For every path, we add it's attributes to the config object. 
         If there are children elements, we tail-end recurse. 
         Otherwise we append the text if found/appropriate*/
   
         // Find the element
-        const configTarget = path.reduce((obj, tag) => {
-          if(!obj[tag]) obj[tag] = {};
-          return obj[tag];
-        }, this.chartData);
-   
+        let configTarget;
+        if(Array.isArray(chartData)) {
+          configTarget = {};
+          chartData.push(configTarget);
+        } else {
+          configTarget = path.reduce((obj, tag) => {
+            // Determine if the missing object should be an array or object. Thank you zingchart and the english language for ending plurals with an 's'!
+            if(!obj[tag]) {
+              obj[tag] = (tag.slice(-1) === 's') ? [] : {};
+            } 
+            return obj[tag];
+          }, chartData);
+        }
+
+
+        /* 
+          Determine if the terminating target should be an array or object, or has text.
+          In the zingchart syntax, array based configs such as labels will have multiple instances.
+        */
+
+
         // Add the attributes from the current
         Object.keys(element.attributes).forEach(index => {
           const attribute = element.attributes[index].name;
@@ -183,21 +198,15 @@ class ZingChart extends HTMLElement {
           }
         });
 
-        // If there is a text node, add it as 'text'.
-        const text = Array.from(element.childNodes).reduce((acc, node) => {
-          if(node.nodeName === '#text') {
-            acc += node.textContent;
-          }
-          return acc;
-        }, '');
-        if(text.length > 0) {
-          configTarget.text = text;
-        }
 
+        if(element.childNodes.length === 1 && element.childNodes[0].nodeName === '#text') {
+          configTarget.text = element.childNodes[0].textContent;
+        } 
         
         // Check to see if there are any children elements and recurse
         if(element.children) {
-          parse(element.children);
+
+          parse(element.children, configTarget);
         }
       })
     }
