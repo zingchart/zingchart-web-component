@@ -14,13 +14,26 @@
     </script>
   </head>
   <body>
-    <zc-line series='[{"values": [1,2,3,5,3]}]'>
+
+    <zc-line>
       <zc-title font-family="Cursive">Hello World</zc-title>
       <zc-labels>
         <zc-label x="15%" y="5%" font-size="22px" border-width="1px" font-color="black" font-family="Times">Hello</zc-label>
-        <zc-label x="15%" y="10%" font-size="22px" border-width="1px" font-color="black">Hello World</zc-label>
+        <zc-label x="15%" y="10%" font-size="22px" border-width="1px" font-color="red">Hello World</zc-label>
       </zc-labels>
+      <zc-legend draggable></zc-legend>
+      <zc-crosshair-x>
+      </zc-crosshair-x>
+      <zc-series>
+        <zc-series-0 text="Something" values="[3,4,5,3,4,3,3]"></zc-series-0>
+        <zc-series-1 values="[1,1,2,2,3]" line-color="purple">
+          <zc-marker background-color="red"></zc-marker>
+        </zc-series-1>
+        <zc-series-2 values="[3,4,5,3,4,3,3]"></zc-series-2>
+      </zc-series>
     </zc-line>
+
+
     <zc-bar data='{"series": [{"values": [1,2,3,5,3]}]}'></zc-bar>
   </body>
 </html>

@@ -119,16 +119,6 @@ class ZingChart extends HTMLElement {
       }
     }
 
-    // Logic Validation - Check to see if there is a data - it's not required if the user is using a specific chart element. 
-    if (!this.chartData && this.tagName === 'zing-chart') {
-      throw new Error("A data is required to render a chart");
-    } else if(!this.chartData && this.tagName !== 'zing-chart') {
-      // Check to see if the user provided a series attribute.
-      if(!series) {
-        throw new Error("A series is required to render a chart");
-      } 
-    }
-
     // Merge the series and data
     if(!this.chartData) {
       this.chartData = {
@@ -160,7 +150,19 @@ class ZingChart extends HTMLElement {
 
     function parse(children, chartData) {
       Array.from(children).forEach((element) => {
-        const path = element.tagName.toLowerCase().replace('zc-', '').split('-');
+
+        let path = element.tagName.toLowerCase().replace('zc-', '').split('-');
+
+        // Check the path for any -x/-y/-r etc properties. If there are, then we attach them back to the previous fragment.
+        path = path.reduce((acc, part, index) => {
+          if(part.length === 1) {
+            acc[index-1] += '-' + part;
+          } else {
+            acc.push(part);
+          }
+          return acc;
+        },[]);
+        
   
         /* For every path, we add it's attributes to the config object. 
         If there are children elements, we tail-end recurse. 
@@ -181,23 +183,24 @@ class ZingChart extends HTMLElement {
           }, chartData);
         }
 
-
         /* 
           Determine if the terminating target should be an array or object, or has text.
           In the zingchart syntax, array based configs such as labels will have multiple instances.
         */
-
-
         // Add the attributes from the current
         Object.keys(element.attributes).forEach(index => {
           const attribute = element.attributes[index].name;
-          const value = element.attributes[index].value;
+          let value = element.attributes[index].value;
           // Skip over any event listeners
           if(!EVENT_NAMES.includes(attribute)) {
-            configTarget[attribute] = value;
+
+            // Parse values in the case of series.
+            if(typeof value === 'string' && value[0] === '[') {
+              value = JSON.parse(value);
+            }
+            configTarget[attribute] = value || true;
           }
         });
-
 
         if(element.childNodes.length === 1 && element.childNodes[0].nodeName === '#text') {
           configTarget.text = element.childNodes[0].textContent;
