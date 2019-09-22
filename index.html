@@ -1,6 +1,10 @@
 <html>
   <head>
-
+    <style>
+      zing-chart, zc-line, zc-bar, zc-scatter, zc-pie {
+        visibility: hidden;
+      }
+    </style>
     <script type="module">
       import ZCLine from './charts/ZCLine.js';
       customElements.define('zc-line', ZCLine);
@@ -10,7 +14,9 @@
     </script>
   </head>
   <body>
-    <zc-line series='[{"values": [1,2,3,5,3]}]' />
-    <zc-bar data='{"series": [{"values": [1,2,3,5,3]}]}' />
+    <zc-line series='[{"values": [1,2,3,5,3]}]'>
+      <zc-title font-family="Cursive">Hello World</zc-title>
+    </zc-line>
+    <zc-bar data='{"series": [{"values": [1,2,3,5,3]}]}'></zc-bar>
   </body>
 </html>

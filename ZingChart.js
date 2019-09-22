@@ -1,5 +1,6 @@
 import {zingchart, ZC} from './node_modules/zingchart/es6.js';
 import {DEFAULT_HEIGHT, DEFAULT_WIDTH, METHOD_NAMES, EVENT_NAMES} from './constants.js';
+
 class ZingChart extends HTMLElement {
   constructor() {
     super();
@@ -14,7 +15,6 @@ class ZingChart extends HTMLElement {
     this.palette = null;
     this.series = null;
     this.defaults = null;
-    
   }
   connectedCallback() {
     this.setup();
@@ -143,8 +143,66 @@ class ZingChart extends HTMLElement {
       this.chartData.type = this.type;
     } 
     this.defaults = this.getAttribute('defaults');
+
+    // Parse any innerhtml that the user provided that is prefixed with "zc" and convert it to json.
+    this.parseChildren();
+
+    // Clear out any user provided syntax components.
+    this.innerHTML = '';
+
+    // Show the custom component
+    this.style.visibility = 'initial';
   }
 
+  parseChildren() {
+    return parse.call(this, this.children);
+
+    function parse(children) {
+      Array.from(children).forEach((element) => {
+        console.log(element);
+        const path = element.tagName.toLowerCase().replace('zc-', '').split('-');
+        console.log(path);
+  
+        /* For every path, we add it's attributes to the config object. 
+        If there are children elements, we tail-end recurse. 
+        Otherwise we append the text if found/appropriate*/
+  
+        // Find the element
+        const configTarget = path.reduce((obj, tag) => {
+          if(!obj[tag]) obj[tag] = {};
+          return obj[tag];
+        }, this.chartData);
+   
+        // Add the attributes from the current
+        Object.keys(element.attributes).forEach(index => {
+          const attribute = element.attributes[index].name;
+          const value = element.attributes[index].value;
+          // Skip over any event listeners
+          if(!EVENT_NAMES.includes(attribute)) {
+            configTarget[attribute] = value;
+          }
+        });
+
+        // If there is a text node, add it as 'text'.
+        const text = Array.from(element.childNodes).reduce((acc, node) => {
+          if(node.nodeName === '#text') {
+            acc += node.textContent;
+          }
+          return acc;
+        }, '');
+        if(text.length > 0) {
+          configTarget.text = text;
+        }
+
+        
+        // Check to see if there are any children elements and recurse
+        if(element.children) {
+          parse(element.children);
+        }
+      })
+    }
+
+  }
 
   render() {
     const config = {
