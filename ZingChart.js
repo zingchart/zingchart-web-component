@@ -6,25 +6,32 @@ class ZingChart extends HTMLElement {
     this.id = '';
     this.instance = {};
     this.count = 0;
-    this.chartConfig = null;
     this.observer = null;
+    this.ID_PREFIX = 'zingchart-wc';
+
+    // User properties
+    this.chartData = null;
+    this.palette = null;
+    this.series = null;
+    this.defaults = null;
     
   }
   connectedCallback() {
     this.setup();
+    this.parse();
     this.render();
     this.attachObservers();
   }
 
   attachObservers() {
-    const config = {
+    const data = {
       attributes: true,
     }
     const callback = (mutationsList, observer) => {
       for(let mutation of mutationsList) {
         if(mutation.type === 'attributes') {
           switch(mutation.attributeName) {
-            case 'config':
+            case 'data':
               this.rerender();
             break;
             case 'height':
@@ -37,7 +44,7 @@ class ZingChart extends HTMLElement {
       }
     }
     this.observer = new MutationObserver(callback);
-    this.observer.observe(this, config);
+    this.observer.observe(this, data);
   }
   destroy() {
     // Destroy zingchart
@@ -47,9 +54,10 @@ class ZingChart extends HTMLElement {
     this.observer.disconnect();
 
   }
+
   setup() {
     // Set the id for ZingChart to bind to
-    this.id = "zingchart-wc-" + this.count++;
+    this.id = `${this.ID_PREFIX}-${this.count++}`;
     this.setAttribute('id', this.id);
 
     // Apply all of ZingChart's methods directly to this element's instance
@@ -79,29 +87,76 @@ class ZingChart extends HTMLElement {
     });
   }
   rerender() {
-    let config = this.getAttribute('config');
+    let data = this.getAttribute('data');
     try {
       zingchart.exec(this.id, 'setdata', {
-        data: JSON.parse(config),
+        data: JSON.parse(data),
       });
     } catch(error) {
       console.log(error);
-      console.error('Invalid chart configuration')
+      console.error('Invalid chart datauration')
     }
   }
-  render() {
+  parse() {
     // Check the user's properties
-    this.chartConfig = this.getAttribute('config')
-    if (!this.chartConfig) {
-      throw new Error("A config is required to render a chart");
+    this.chartData = this.getAttribute('data');
+    let series = this.getAttribute('series');
+    
+
+    // Parse to JSON.
+    if(this.chartData) {
+      try {
+        this.chartData = JSON.parse(this.chartData);
+      } catch(error) {
+        throw new Error('The provided data is not a proper JSON');
+      }
+    }
+    if(series) {
+      try {
+        series = JSON.parse(series);
+      } catch(error) {
+        throw new Error('The provided series is not a proper JSON');
+      }
     }
 
-    zingchart.render({
+    // Logic Validation - Check to see if there is a data - it's not required if the user is using a specific chart element. 
+    if (!this.chartData && this.tagName === 'zing-chart') {
+      throw new Error("A data is required to render a chart");
+    } else if(!this.chartData && this.tagName !== 'zing-chart') {
+      // Check to see if the user provided a series attribute.
+      if(!series) {
+        throw new Error("A series is required to render a chart");
+      } 
+    }
+
+    // Merge the series and data
+    if(!this.chartData) {
+      this.chartData = {
+        series,
+      };
+    } else if(this.chartData && series) {
+      this.chartData.series = series;
+    }
+
+    // Inject the type from chart-specific components.
+    if(this.type) {
+      this.chartData.type = this.type;
+    } 
+    this.defaults = this.getAttribute('defaults');
+  }
+
+
+  render() {
+    const config = {
       id: this.id,
-      data: this.chartConfig,
+      data: this.chartData,
       width: this.getAttribute('width') || DEFAULT_WIDTH,
       height: this.getAttribute('height') || DEFAULT_HEIGHT,
-    });
+    };
+    if(this.defaults) {
+      config.defaults = defaults;
+    }
+    zingchart.render(config);
   }
 }
 

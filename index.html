@@ -2,10 +2,15 @@
   <head>
 
     <script type="module">
-      import './index.js';
+      import ZCLine from './charts/ZCLine.js';
+      customElements.define('zc-line', ZCLine);
+
+      import ZCBar from './charts/ZCBar.js';
+      customElements.define('zc-bar', ZCBar);
     </script>
   </head>
   <body>
-    <zing-chart config="{type:'line', series: [{values: [1,2,3,5,3]}]}"/>
+    <zc-line series='[{"values": [1,2,3,5,3]}]' />
+    <zc-bar data='{"series": [{"values": [1,2,3,5,3]}]}' />
   </body>
 </html>
