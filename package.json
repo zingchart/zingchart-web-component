@@ -1,0 +1,14 @@
+{
+  "name": "zingchart-wc",
+  "version": "1.0.0",
+  "description": "A web component wrapper for ZingChart",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ZingSoft Inc",
+  "license": "MIT",
+  "dependencies": {
+    "zingchart": "^2.8.7"
+  }
+}
