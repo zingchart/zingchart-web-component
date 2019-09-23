@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "papaparse": "^5.1.0",
-    "zingchart": "^2.8.7"
+    "zingchart": "^2.8.7",
+    "zinggrid": "^1.1.1"
   }
 }
