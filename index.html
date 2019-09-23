@@ -11,9 +11,13 @@
 
       import ZCBar from './charts/ZCBar.js';
       customElements.define('zc-bar', ZCBar);
+
+      import ZCMap from './charts/ZCMap.js';
+      customElements.define('zc-map', ZCMap);
     </script>
   </head>
   <body>
+
 
     <zc-line>
       <zc-title font-family="Cursive">Hello World</zc-title>
@@ -22,8 +26,7 @@
         <zc-label x="15%" y="10%" font-size="22px" border-width="1px" font-color="red">Hello World</zc-label>
       </zc-labels>
       <zc-legend draggable></zc-legend>
-      <zc-crosshair-x>
-      </zc-crosshair-x>
+      <zc-crosshair-x></zc-crosshair-x>
       <zc-series>
         <zc-series-0 text="Something" values="[3,4,5,3,4,3,3]"></zc-series-0>
         <zc-series-1 values="[1,1,2,2,3]" line-color="purple">
@@ -33,6 +36,7 @@
       </zc-series>
     </zc-line>
 
+    <zc-map name="usa"></zc-map>
 
     <zc-bar data='{"series": [{"values": [1,2,3,5,3]}]}'></zc-bar>
   </body>
