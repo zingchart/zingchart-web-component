@@ -9,6 +9,7 @@
   "author": "ZingSoft Inc",
   "license": "MIT",
   "dependencies": {
+    "papaparse": "^5.1.0",
     "zingchart": "^2.8.7"
   }
 }

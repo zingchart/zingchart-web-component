@@ -25,7 +25,9 @@ class ZingChart extends HTMLElement {
 
   attachObservers() {
     const data = {
+      childList: true,
       attributes: true,
+      subtree: true,
     }
     const callback = (mutationsList, observer) => {
       for(let mutation of mutationsList) {
@@ -38,9 +40,14 @@ class ZingChart extends HTMLElement {
             case 'width': 
               this.modifyDimensions();
             break;
+            case 'values': 
+              this.updateValues(mutation);
+            break;
+            case 'series' :
+              this.updateSeries(mutation);
+            break;
           }
         }
-
       }
     }
     this.observer = new MutationObserver(callback);
@@ -49,12 +56,38 @@ class ZingChart extends HTMLElement {
   destroy() {
     // Destroy zingchart
     zingchart.exec(this.id, 'destroy');
-
     // Deattach the mutation observer
     this.observer.disconnect();
 
   }
-
+  updateValues(mutation) {
+    let target = mutation.target;
+    const tagName = target.tagName.toLowerCase();
+    if(tagName.includes('zc-series')) {
+      const series = {
+        values: JSON.parse(target.getAttribute('values')),
+      }
+      // If the binding occurs on a series entry rather than the entire series, we need the index.
+      if(tagName.includes('zc-series-')) {
+        series.plotindex = tagName.replace('zc-series-', '');
+      }
+      this.setseriesvalues(series);
+    }
+  }
+  updateSeries(mutation) {
+    let target = mutation.target;
+    const tagName = target.tagName.toLowerCase();
+    if(tagName.includes('zc-series')) {
+      const config = {
+        data: JSON.parse(target.getAttribute('series'))
+      };
+      // If the binding occurs on a series entry rather than the entire series, we need the index.
+      if(tagName.includes('zc-series-')) {
+        config.plotindex = tagName.replace('zc-series-', '');
+      }
+      this.setseriesdata(config);
+    }
+  }
   setup() {
     // Set the id for ZingChart to bind to
     this.id = `${this.ID_PREFIX}-${this.count++}`;
@@ -63,7 +96,7 @@ class ZingChart extends HTMLElement {
     // Apply all of ZingChart's methods directly to this element's instance
     METHOD_NAMES.forEach(name => {
       this[name] = args => {
-        return zingchart.exec(id, name, args);
+        return zingchart.exec(this.id, name, args);
       };
     });
 
@@ -94,14 +127,13 @@ class ZingChart extends HTMLElement {
       });
     } catch(error) {
       console.log(error);
-      console.error('Invalid chart datauration')
+      console.error('Invalid chart configuration')
     }
   }
   parse() {
     // Check the user's properties
     this.chartData = this.getAttribute('data');
     let series = this.getAttribute('series');
-    
 
     // Parse to JSON.
     if(this.chartData) {
@@ -137,11 +169,6 @@ class ZingChart extends HTMLElement {
     // Parse any innerhtml that the user provided that is prefixed with "zc" and convert it to json.
     this.parseChildren();
 
-    // Clear out any user provided syntax components.
-    this.innerHTML = '';
-
-    // Show the custom component
-    this.style.visibility = 'initial';
   }
 
   parseChildren() {
@@ -150,9 +177,7 @@ class ZingChart extends HTMLElement {
 
     function parse(children, chartData) {
       Array.from(children).forEach((element) => {
-
         let path = element.tagName.toLowerCase().replace('zc-', '').split('-');
-
         // Check the path for any -x/-y/-r etc properties. If there are, then we attach them back to the previous fragment.
         path = path.reduce((acc, part, index) => {
           if(part.length === 1) {
@@ -191,9 +216,8 @@ class ZingChart extends HTMLElement {
         Object.keys(element.attributes).forEach(index => {
           const attribute = element.attributes[index].name;
           let value = element.attributes[index].value;
-          // Skip over any event listeners
-          if(!EVENT_NAMES.includes(attribute)) {
-
+          // Skip over any event listeners and any zing-data- properties
+          if(!EVENT_NAMES.includes(attribute) && !attribute.includes('zing-data-')) {
             // Parse values in the case of series.
             if(typeof value === 'string' && value[0] === '[') {
               value = JSON.parse(value);
@@ -227,6 +251,9 @@ class ZingChart extends HTMLElement {
       config.defaults = defaults;
     }
     zingchart.render(config);
+
+    // Only set the wrapper to visibility initial. We want to keep all other pseudo-components hidden
+    this.querySelector(`#${this.id}-wrapper`).style.visibility = 'initial';
   }
 }
 
