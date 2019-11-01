@@ -1,16 +1,21 @@
 {
-  "name": "zingchart-wc",
-  "version": "1.0.0",
+  "name": "zingchart-component",
+  "version": "0.0.1",
   "description": "A web component wrapper for ZingChart",
   "main": "index.js",
+  "keywords": [
+    "charts",
+    "dataviz",
+    "data visualization",
+    "web component",
+    "dashboard"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "ZingSoft Inc",
   "license": "MIT",
   "dependencies": {
-    "papaparse": "^5.1.0",
-    "zingchart": "^2.8.7",
-    "zinggrid": "^1.1.1"
+    "zingchart": "^2.8.7"
   }
 }

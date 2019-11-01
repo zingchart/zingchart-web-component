@@ -106,7 +106,7 @@ class ZingChart extends HTMLElement {
       const functionName = this.attributes[index].value;
       // Bind all event names
       if(EVENT_NAMES.includes(eventName)) {
-        zingchart.bind(id, eventName, result => {
+        zingchart.bind(this.id, eventName, result => {
           window[functionName](result);
         });
       }
@@ -172,7 +172,6 @@ class ZingChart extends HTMLElement {
   }
 
   parseChildren() {
-    // return parse.call(this, this.children);
     return parse(this.children, this.chartData);
 
     function parse(children, chartData) {
