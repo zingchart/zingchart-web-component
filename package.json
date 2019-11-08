@@ -1,8 +1,8 @@
 {
-  "name": "zingchart-component",
+  "name": "zingchart-web-component",
   "version": "0.0.1",
   "description": "A web component wrapper for ZingChart",
-  "main": "index.js",
+  "main": "ZingChart.js",
   "keywords": [
     "charts",
     "dataviz",

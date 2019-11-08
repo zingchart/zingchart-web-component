@@ -1,34 +1,40 @@
 # ZingChart Web Component
-
 A web component wrapper around the ZingChart library.
-
 
 ## Install
 
-Install the zingchart-wc package via npm
+Install the zingchart-web-component package via npm
 
-`$ npm install zingchart-wc`
+`$ npm install zingchart-web-component`
 
 or simply link to our bundled browser script from this repo:
 
-`<script src="path/to/zingchart-wc.min.js"></script>`
+`<script src="path/to/zingchart-web-component.min.js"></script>`
 
 
 ## Include in your project
 
-This web component exposes out the main `<zing-chart>` web component, as well as chart-specific components such as `<zc-line>`  for readability and convenience.
+This web component exposes out the main `<zing-chart>` web component, as well as chart-specific components such as `<zc-line>` for readability and convenience.
 
 Depending on how you include this package, your inclusion will be different.
-
 
 ### Using the browser script
 All of the web components are automatically registered for you!
 
 ### Import Modules
+
+Import the generic zingchart component
+```js
+import ZingChart from 'zingchart-web-component';
+customElements.define('zing-chart', ZingChart);
+```
+
+OR
+
 Manually import each chart and register it as a web component.
 
 ```js
-import {Line} from 'zingchart-wc';
+import {Line} from 'zingchart-web-component/charts/ZCLine.js';
 customElements.define('zc-line', Line);
 ```
 
@@ -92,7 +98,6 @@ For objects that accept arrays, simply use a parent component just as you would 
 </zc-line>
 ```
 
-
 ### Reactivity
 
 Currently the `height`, `width`, `data`, `series`, and `values` are watched and will re-render the chart if changed. Future support for all attributes is planned.
@@ -118,7 +123,6 @@ chart.setseriesvalues({
     [37, 11, 27, 25, ...]
   ]
 });
-
 ```
 
 ### Events
