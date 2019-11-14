@@ -1,12 +1,21 @@
 import {zingchart, ZC} from './node_modules/zingchart/es6.js';
 import {DEFAULT_HEIGHT, DEFAULT_WIDTH, METHOD_NAMES, EVENT_NAMES} from './constants.js';
 
+// One time setup globally to handle all zingchart-react objects in the app space.
+if (!window.ZCWC) {
+  window.ZCWC = {
+    instances: {},
+    count: 0
+  };
+  const wcStyle = document.createElement('style');
+  wcStyle.innerHTML = '.zingchart-wc > * {visibility: hidden;}';
+  document.head.appendChild(wcStyle);
+}
+
 class ZingChart extends HTMLElement {
   constructor() {
     super();
     this.id = '';
-    this.instance = {};
-    this.count = 0;
     this.observer = null;
     this.ID_PREFIX = 'zingchart-wc';
 
@@ -15,6 +24,9 @@ class ZingChart extends HTMLElement {
     this.palette = null;
     this.series = null;
     this.defaults = null;
+
+    // Add the webcomponent class
+    this.classList.add('zingchart-wc');
   }
   connectedCallback() {
     this.setup();
@@ -90,7 +102,7 @@ class ZingChart extends HTMLElement {
   }
   setup() {
     // Set the id for ZingChart to bind to
-    this.id = `${this.ID_PREFIX}-${this.count++}`;
+    this.id = `${this.ID_PREFIX}-${window.ZCWC.count++}`;
     this.setAttribute('id', this.id);
 
     // Apply all of ZingChart's methods directly to this element's instance
@@ -256,4 +268,4 @@ class ZingChart extends HTMLElement {
   }
 }
 
-export default ZingChart;
+export {ZingChart as default, ZC};

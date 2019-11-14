@@ -69,7 +69,7 @@ For instance, if we want to set our data for our chart with a component, we woul
 ```html
   <zc-line>
     <zc-series>
-      <zc-series-0 values="[3,4,3,2,4,3,3]></zc-series-0>
+      <zc-series-0 values="[3,4,3,2,4,3,3]"></zc-series-0>
     </zc-series>
   </zc-line>
 ```
@@ -80,7 +80,7 @@ Similarly, if we wanted to add a draggable legend, we would simply add the follo
   <zc-line>
     <zc-legend draggable></zc-legend>
     <zc-series>
-      <zc-series-0 values="[3,4,3,2,4,3,3]></zc-series-0>
+      <zc-series-0 values="[3,4,3,2,4,3,3]"></zc-series-0>
     </zc-series>
   </zc-line>
 ```
