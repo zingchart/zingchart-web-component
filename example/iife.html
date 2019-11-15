@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <script src="../dist/zingchart-wc.min.js"></script>
+
+  </head>
+  <body>
+    <zing-chart data='{"type": "bar", "series": [{"values": [1,2,3,4,5,6,4] }]}'></zing-chart>
+    <zing-chart data='{"type": "scatter", "series": [{"values": [1,2,3,4,5,6,4] }]}'></zing-chart>
+
+    <zc-line>
+      <zc-title font-family="Cursive">Hello World</zc-title>
+      <zc-labels>
+        <zc-label x="15%" y="50%" font-size="22px" border-width="1px" font-color="red">This is a Label</zc-label>
+      </zc-labels>
+      <zc-legend scrollable></zc-legend>
+      <zc-crosshair-x></zc-crosshair-x>
+      <zc-scale-x step="month" min-value="1264935600000">
+        <zc-label>Month/Year</zc-label>
+        <zc-transform type="date" all="%m/%y"></zc-transform>
+      </zc-scale-x>
+      <zc-series>
+        <zc-series-0 values="[3,4,3,2,4,3,3]"></zc-series-0>
+      </zc-series>
+    </zc-line>
+
+
+
+  </body>
+</html>
