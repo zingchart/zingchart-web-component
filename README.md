@@ -7,19 +7,12 @@ Install the zingchart-web-component package via npm
 
 `$ npm install zingchart-web-component`
 
-or simply link to our bundled browser script from this repo:
-
-`<script src="path/to/zingchart-web-component.min.js"></script>`
-
 
 ## Include in your project
 
 This web component exposes out the main `<zing-chart>` web component, as well as chart-specific components such as `<zc-line>` for readability and convenience.
 
 Depending on how you include this package, your inclusion will be different.
-
-### Using the browser script
-All of the web components are automatically registered for you!
 
 ### Import Modules
 
@@ -53,7 +46,7 @@ The data attribute takes the exact same JSON that the ZingChart library uses.
 We can also simplifiy the example by using our line chart component:
 
 ```html
-<zc-line data='"series": {["values": 1,2,3,4,5,6,4]}'></zc-line>
+<zc-line data='"series": [{"values": [1,2,3,4,5,6,4]}]'></zc-line>
 ```
 
 Note the absence of a "id" property. We autogenerate a id property so you don't have to (you can still provide one).
