@@ -16,6 +16,6 @@
   "author": "ZingSoft Inc",
   "license": "MIT",
   "dependencies": {
-    "zingchart": "^2.8.7"
+    "zingchart": "^2.9.3"
   }
 }
