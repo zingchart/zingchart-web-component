@@ -1,6 +1,6 @@
 {
   "name": "zingchart-web-component",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A web component wrapper for ZingChart",
   "main": "ZingChart.js",
   "keywords": [
@@ -16,6 +16,6 @@
   "author": "ZingSoft Inc",
   "license": "MIT",
   "dependencies": {
-    "zingchart": "^2.9.3"
+    "zingchart": "latest"
   }
 }

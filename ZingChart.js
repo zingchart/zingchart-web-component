@@ -1,4 +1,3 @@
-import {ZC} from  './node_modules/zingchart/es6.js';
 import {DEFAULT_HEIGHT, DEFAULT_WIDTH, METHOD_NAMES, EVENT_NAMES} from './constants.js';
 
 // One time setup globally to handle all zingchart-react objects in the app space.
@@ -268,4 +267,4 @@ class ZingChart extends HTMLElement {
   }
 }
 
-export {ZingChart as default, ZC};
+export {ZingChart as default};
