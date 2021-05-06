@@ -3,11 +3,13 @@ A web component wrapper around the ZingChart library.
 
 ## Install
 
+Install the zingchart package via npm
+
+`$ npm install zingchart`
+
 Install the zingchart-web-component package via npm
 
 `$ npm install zingchart-web-component`
-
-ZingChart is already included as a dependency, so there's no need to download and include it.
 
 
 ## Include in your project
@@ -20,6 +22,7 @@ Depending on how you include this package, your inclusion will be different.
 
 Import the generic zingchart component
 ```js
+import 'zingchart/es6.js';
 import ZingChart from 'zingchart-web-component';
 customElements.define('zing-chart', ZingChart);
 ```
@@ -29,6 +32,7 @@ OR
 Manually import each chart and register it as a web component.
 
 ```js
+import 'zingchart/es6.js';
 import {Line} from 'zingchart-web-component/charts/ZCLine.js';
 customElements.define('zc-line', Line);
 ```
