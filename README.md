@@ -7,6 +7,8 @@ Install the zingchart-web-component package via npm
 
 `$ npm install zingchart-web-component`
 
+ZingChart is already included as a dependency, so there's no need to download and include it.
+
 
 ## Include in your project
 
